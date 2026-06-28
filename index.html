@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Our First Anniversary ❤️</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="hero">
+
+    <div class="overlay">
+
+        <h1>❤️ Happy 1st Anniversary ❤️</h1>
+
+        <p>
+            365 days...
+            Thousands of memories...
+            Infinite love.
+        </p>
+
+        <a href="#categories" class="btn">
+            Enter Our Memories
+        </a>
+
+        <div class="hero-letter">
+            <h2>Happy Anniversary ❤️</h2>
+            <p>
+                Thank you for making this year the happiest year of my life. Every smile. Every call. Every laugh. Every little moment. You made ordinary days feel magical. I hope this is only the beginning of our story.
+            </p>
+            <p class="signature">A Letter For You 💌</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<section id="categories">
+
+    <h2>Our Beautiful Memories</h2>
+
+    <div class="filter-container" id="filterContainer"></div>
+
+    <div class="cards" id="cardsContainer"></div>
+
+</section>
+
+
+<footer>
+
+Made with ❤️ only for You.
+
+</footer>
+
+<script>
+const categories = {
+    all: {
+        name: "✨ All Memories",
+        files: []
+    },
+    smiles: {
+        name: "😊 Smiles",
+        files: Array.from({length: 21}, (_, i) => `smile${i+1}.jpg`),
+        titles: [
+            "Beautiful Smile",
+            "Shining Bright",
+            "Sweet Smile",
+            "Radiant Joy",
+            "Pure Happiness",
+            "Cute Smile",
+            "Golden Hour Smile",
+            "Lovely Smile",
+            "Heartwarming Smile"
+        ],
+        captions: [
+            "Your smile is my favorite thing in the world.",
+            "That beautiful smile of yours.",
+            "Keep smiling, it makes my heart melt.",
+            "Your smile is brighter than any star.",
+            "I love seeing you happy.",
+            "A smile that lights up the whole room.",
+            "You have the most beautiful smile ever."
+        ]
+    },
+    selfies: {
+        name: "📸 Selfies",
+        files: Array.from({length: 33}, (_, i) => `selfies${i+1}.jpg`),
+        titles: [
+            "My Favorite Selfie",
+            "Stunning View",
+            "Selfie Queen",
+            "Cute Pose",
+            "Picture Perfect",
+            "Simply Gorgeous",
+            "Too Adorable",
+            "Charming Selfie",
+            "Lovely Face"
+        ],
+        captions: [
+            "Absolutely gorgeous.",
+            "My favorite view.",
+            "Just being adorable.",
+            "Simply beautiful.",
+            "No words needed for this level of perfection.",
+            "You are cute beyond belief.",
+            "A perfect picture of a perfect person."
+        ]
+    },
+    sleeping: {
+        name: "💤 Sleepy",
+        files: [
+            "sleeping.jpg",
+            ...Array.from({length: 20}, (_, i) => `sleeping${i+1}.jpg`),
+            ...Array.from({length: 15}, (_, i) => `justsleep${i+1}.jpg`)
+        ],
+        titles: [
+            "Sleeping Princess",
+            "Sleeping Angel",
+            "Peaceful Dreams",
+            "Dreaming Angel",
+            "Sleeping Beauty",
+            "Sweet Dreams",
+            "Quiet Moments",
+            "Soft Dreams",
+            "Resting Angel"
+        ],
+        captions: [
+            "Peaceful dreams.",
+            "Sleeping like an angel.",
+            "You look so precious when asleep.",
+            "My sleeping beauty.",
+            "Even in your sleep, you steal my heart."
+        ]
+    },
+    kisses: {
+        name: "💋 Kiss Poses",
+        files: Array.from({length: 17}, (_, i) => `kisspose${i+1}.jpg`),
+        titles: [
+            "Blow a Kiss",
+            "Sweet Kiss",
+            "Kiss Pose",
+            "Sending Love",
+            "Lovely Kiss",
+            "Mwah!",
+            "Adorable Kiss",
+            "Cute Kiss Pose"
+        ],
+        captions: [
+            "Sending you a million kisses!",
+            "Too cute to handle.",
+            "A little kiss for you.",
+            "Our sweet and playful moments.",
+            "Mwah! So adorable."
+        ]
+    },
+    together: {
+        name: "✨ Together & Other",
+        files: ["together1.jpg", "random1.jpg"],
+        titles: [
+            "Together Forever",
+            "Everyday Cuteness",
+            "Memory Together",
+            "My Favorite Person",
+            "Us Against the World",
+            "Perfect Match"
+        ],
+        captions: [
+            "Every moment with you is a treasure.",
+            "Everyday cuteness.",
+            "Us, making beautiful memories.",
+            "I cherish every second with you."
+        ]
+    }
+};
+
+// Combine all files for the "all" category
+categories.all.files = [
+    ...categories.smiles.files,
+    ...categories.selfies.files,
+    ...categories.sleeping.files,
+    ...categories.kisses.files,
+    ...categories.together.files
+];
+
+// Helper to determine category of a file for random captions
+function getCategoryKey(fileName) {
+    if (fileName.startsWith('smile')) return 'smiles';
+    if (fileName.startsWith('selfie')) return 'selfies';
+    if (fileName.startsWith('sleeping') || fileName.startsWith('justsleep')) return 'sleeping';
+    if (fileName.startsWith('kisspose')) return 'kisses';
+    return 'together';
+}
+
+function getFileNumber(fileName) {
+    const numMatch = fileName.match(/\d+/);
+    return numMatch ? parseInt(numMatch[0], 10) : 0;
+}
+
+function getCaption(fileName) {
+    const key = getCategoryKey(fileName);
+    const captionsList = categories[key].captions;
+    const fileNum = getFileNumber(fileName);
+    const captionIdx = fileNum % captionsList.length;
+    return captionsList[captionIdx];
+}
+
+function getTitle(fileName) {
+    const key = getCategoryKey(fileName);
+    const titlesList = categories[key].titles;
+    const emoji = categories[key].name.split(" ")[0];
+    const fileNum = getFileNumber(fileName);
+    
+    if (titlesList) {
+        const titleIdx = fileNum % titlesList.length;
+        return `${emoji} ${titlesList[titleIdx]}`;
+    }
+    return `${emoji} Sweet Memory`;
+}
+
+const filterContainer = document.getElementById('filterContainer');
+const cardsContainer = document.getElementById('cardsContainer');
+
+// Generate filter buttons
+Object.keys(categories).forEach((key, index) => {
+    const btn = document.createElement('button');
+    btn.className = `filter-btn${index === 0 ? ' active' : ''}`;
+    btn.textContent = categories[key].name;
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCards(key);
+    });
+    filterContainer.appendChild(btn);
+});
+
+function renderCards(categoryKey) {
+    cardsContainer.innerHTML = '';
+    const files = categories[categoryKey].files;
+    
+    files.forEach((file, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.animationDelay = `${(index % 12) * 0.05}s`;
+        
+        const img = document.createElement('img');
+        img.src = `Images/${file}`;
+        img.alt = file;
+        img.loading = 'lazy';
+        
+        const h3 = document.createElement('h3');
+        h3.textContent = getTitle(file);
+        
+        const p = document.createElement('p');
+        p.textContent = getCaption(file);
+        
+        card.appendChild(img);
+        card.appendChild(h3);
+        card.appendChild(p);
+        cardsContainer.appendChild(card);
+    });
+}
+
+// Initial render
+renderCards('all');
+</script>
+
+</body>
+
+</html>
